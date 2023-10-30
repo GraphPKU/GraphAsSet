@@ -446,8 +446,8 @@ def loaddataset(name: str,
         y_slice = int(name[3:])
 
         def qm9pretrans(data):
-            data.x = (data.x + 1).to(torch.long)
-            data.edge_attr = (data.edge_attr + 1).to(torch.long)
+            data.x = (data.x + 1)# .to(torch.long)
+            data.edge_attr = (data.edge_attr + 1)# .to(torch.long)
             return data
         
         def qm9trans(data):

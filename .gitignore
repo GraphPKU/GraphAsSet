@@ -7,3 +7,8 @@ qm9
 zinc
 checkfile.py 
 plottraj.py
+mod
+*.out
+*.sh
+readout.py
+.gitignore

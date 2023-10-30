@@ -21,15 +21,8 @@ class QInputEncoder(nn.Module):
                                        **kwargs["xemb"])
             self.edgeEmb = MultiEmbedding(hiddim, [5, 5, 5], **kwargs["xemb"])
         elif kwargs["dataset"].startswith("qm9"):
-            self.xemb = MultiEmbedding(
-                hiddim, [5, 5, 5, 5, 5, 15, 5, 5, 5, 5, 10],
-                **kwargs["xemb"])  #nn.Sequential(nn.Linear(11, hiddim))
-            self.edgeEmb = MultiEmbedding(hiddim, [
-                5,
-                5,
-                5,
-                5,
-            ], **kwargs["xemb"])
+            self.xemb = nn.Linear(11, hiddim)
+            self.edgeEmb = nn.Linear(4, hiddim)
         elif kwargs["dataset"] == "ogbg-molhiv":
             self.xemb = MultiEmbedding(hiddim, kwargs["xembdims"],
                                        **kwargs["xemb"])
