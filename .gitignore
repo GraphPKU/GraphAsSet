@@ -7,3 +7,13 @@ qm9
 zinc
 checkfile.py 
 plottraj.py
+*.out
+*.pt 
+mod
+torchinductor*
+*_pyg
+opt*
+*.sh
+*.db
+outdated*
+.gitignore

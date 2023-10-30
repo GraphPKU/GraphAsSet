@@ -11,11 +11,13 @@ EPS = 1e-4
 class QInputEncoder(nn.Module):
     LambdaBound: Final[float]
     laplacian: Final[bool]
+    useea: Final[bool]
 
     def __init__(self, featdim, hiddim, LambdaBound=1e-4, **kwargs) -> None:
         super().__init__()
         self.LambdaBound = LambdaBound
         self.featdim = featdim
+        self.useea = False
         if kwargs["dataset"] in ["pepfunc", "pepstruct"]:
             self.xemb = MultiEmbedding(hiddim, [18, 4, 8, 8, 6, 2, 7, 3, 3],
                                        **kwargs["xemb"])
@@ -39,6 +41,7 @@ class QInputEncoder(nn.Module):
         elif kwargs["dataset"] in ["zinc", "zinc-full"]:
             self.xemb = MultiEmbedding(hiddim, [40], **kwargs["xemb"])
             self.edgeEmb = MultiEmbedding(hiddim, [20], **kwargs["xemb"])
+            self.useea = True
         elif kwargs["dataset"] == "pascalvocsp":
             self.xemb = nn.Sequential(nn.Linear(14, hiddim))
             self.edgeEmb = nn.Sequential(nn.Linear(2, hiddim))
@@ -63,8 +66,12 @@ class QInputEncoder(nn.Module):
         '''
         A (b, n, n, d)
         '''
-        eA = self.edgeEmb(A)
-        A = torch.any(A != 0, dim=-1).to(torch.float)
+        if self.useea:
+            eA = A
+            A = A.squeeze(-1).to(torch.float)
+        else:
+            eA = self.edgeEmb(A)
+            A = torch.any(A != 0, dim=-1).to(torch.float)
         D = torch.sum(A, dim=-1)  # (#graph, N)
         if self.laplacian:
             L = torch.diag_embed(D) - A
@@ -105,7 +112,10 @@ class QInputEncoder(nn.Module):
             dist = torch.norm(pos.unsqueeze(1) - pos.unsqueeze(2), dim=-1)
             dist = self.distEmb(dist)
             eA = eA * dist
-        eA.masked_fill_(nodemask.unsqueeze(1).unsqueeze(-1), 0)
-        eA.masked_fill_(nodemask.unsqueeze(2).unsqueeze(-1), 0)
-        U = torch.einsum("bnmd,bml->bnld", eA, U)
+        if self.useea:
+            eA.masked_fill_(nodemask.unsqueeze(1).unsqueeze(-1), 0)
+            eA.masked_fill_(nodemask.unsqueeze(2).unsqueeze(-1), 0)
+            U = torch.einsum("bnmd,bml->bnld", eA, U)
+        else:
+            U = U.unsqueeze(-1)
         return LambdaEmb, Lambdamask, U, X, nodemask

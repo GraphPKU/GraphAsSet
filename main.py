@@ -124,7 +124,6 @@ def parserarg():
     parser.add_argument('--beta', type=float, default=0.9)
     parser.add_argument('--minlr', type=float, default=0.0)
     parser.add_argument('--K', type=float, default=0.0)
-    parser.add_argument('--K2', type=float, default=0.0)
 
     parser.add_argument('--gradclipnorm', type=float, default=1.0)
     parser.add_argument('--decompnoise', type=float, default=0)
@@ -243,7 +242,6 @@ def buildModel(args, num_tasks, device, dataset, needcompile: bool=True):
         assert tx.dim() == 2
         assert torch.all(tx != 0)
         xembdims = (torch.max(tx, dim=0)[0] + 1).tolist()
-        print(xembdims)
     assert torch.all(dataset.edge_attr != 0)
     from utils import act_dict
     kwargs = {
@@ -376,8 +374,8 @@ def main():
         ]
         num_trn = int(trn_ratio * num_data)
         num_val = int(val_ratio * num_data)
-    for rep in range(args.repeat):
-        set_seed(rep+args.seedoffset)
+    for rep in range(args.seedoffset, args.seedoffset + args.repeat):
+        set_seed(rep)
         if "fixed" == split:
             trn_d, val_d, tst_d = datasets
         elif split.startswith("fold"):
@@ -413,20 +411,7 @@ def main():
         print(f"split {len(trn_d)} {len(val_d)} {len(tst_d)}")
         model = buildModel(args, trn_d.num_tasks, device, trn_d)
 
-        grouplambda = list(model.inputencoder.parameters()) + list(model.LambdaEncoder.parameters())
-        grouppred = list(model.predlin.parameters())
-        def filterfunc(p, pL):
-            for p2 in pL:
-                if p is p2:
-                    return False
-            return True
-        groupconv = [p for p in model.parameters() if filterfunc(p, grouplambda+grouppred)]
-        print(len(grouplambda), len(grouppred), len(groupconv), len(list(model.parameters())))
-        optimizer = optim.AdamW(
-            [{"params": grouplambda, "lr": args.lr, "weight_decay": args.wd},
-            {"params": grouppred, "lr": args.lr, "weight_decay": args.wd},
-            {"params": groupconv, "lr": args.lr, "weight_decay": args.wd}], betas=(args.beta, 0.999)
-            )
+        optimizer = optim.AdamW(model.parameters(), lr=args.lr, weight_decay=args.wd, betas=(args.beta, 0.999))
         if args.load is not None:
             print(f"mod/{args.load}.{rep}.pt")
             loadparams = torch.load(f"mod/{args.load}.{rep}.pt",
