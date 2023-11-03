@@ -16,4 +16,8 @@ opt*
 *.sh
 *.db
 outdated*
+mod
+*.out
+*.sh
+readout.py
 .gitignore
