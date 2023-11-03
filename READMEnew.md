@@ -15,7 +15,7 @@ on ZINC-full:
 cd zinc
 mkdir mod
 
-python main.py --dataset zinc-full --repeat 1 --epochs 360 --batch_size 128 --testbatch_size 128 --cosstep 40 --constep 240 --warmstart 40 --num_layers 8 --decompnoise 0   --wd 1e-1 
+python main.py --dataset zinc-full --repeat 1 --epochs 360 --batch_size 128 --testbatch_size 128 --cosstep 40 --conststep 240 --warmstart 40 --num_layers 8 --decompnoise 0   --wd 1e-1 
 ```
 
 qm9
