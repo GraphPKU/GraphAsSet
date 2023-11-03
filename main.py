@@ -156,6 +156,7 @@ def parserarg():
 
     parser.add_argument("--normA", action="store_true")
     parser.add_argument('--nolaplacian', dest="laplacian", action="store_false")
+    parser.add_argument('--nosqrtlambda', dest="sqrtlambda", action="store_false")
     
     parser.add_argument("--noelres", dest="elres", action="store_false")
     parser.add_argument("--nousesvmix", dest="usesvmix", action="store_false")
@@ -260,6 +261,7 @@ def buildModel(args, num_tasks, device, dataset, needcompile: bool=True):
         "inputencoder": {
             "dataset": args.dataset,
             "laplacian": args.laplacian,
+            "sqrtlambda": args.sqrtlambda, 
             "xemb": {
                 "orthoinit": args.emborthoinit,
                 "bn": args.embbn,

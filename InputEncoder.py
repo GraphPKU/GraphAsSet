@@ -12,12 +12,14 @@ class QInputEncoder(nn.Module):
     LambdaBound: Final[float]
     laplacian: Final[bool]
     useea: Final[bool]
+    sqrtlambda: Final[bool]
 
     def __init__(self, featdim, hiddim, LambdaBound=1e-4, **kwargs) -> None:
         super().__init__()
         self.LambdaBound = LambdaBound
         self.featdim = featdim
         self.useea = False
+        self.sqrtlambda = kwargs["sqrtlambda"]
         if kwargs["dataset"] in ["pepfunc", "pepstruct"]:
             self.xemb = MultiEmbedding(hiddim, [18, 4, 8, 8, 6, 2, 7, 3, 3],
                                        **kwargs["xemb"])
@@ -102,7 +104,7 @@ class QInputEncoder(nn.Module):
             Lambda) < self.LambdaBound  # (#graph, M) # mask zero frequency
         U.masked_fill_(Lambdamask.unsqueeze(1), 0)
         U.masked_fill_(nodemask.unsqueeze(-1), 0)
-        if self.laplacian:
+        if self.sqrtlambda:
             Lambda = torch.sqrt(torch.relu_(Lambda))
         if self.training:
             Lambda += self.decompnoise * torch.randn_like(Lambda)
