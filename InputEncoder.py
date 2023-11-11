@@ -82,7 +82,6 @@ class QInputEncoder(nn.Module):
             eA = self.edgeEmb(A)
             A = torch.any(A != 0, dim=-1).to(torch.float)
         D = torch.sum(A, dim=-1)  # (#graph, N)
-        assert torch.all(A==A.transpose(-1, -2))
         if self.laplacian:
             L = torch.diag_embed(D) - A
         else:

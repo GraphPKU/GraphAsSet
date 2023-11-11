@@ -7,7 +7,7 @@ We use python 3.10 with pytorch 2.0.1, torchmetrics 1.0.3, ogb 1.3.6, and pyg 2.
 On ZINC:
 ```
 cd zinc
-python main.py --dataset zinc --repeat 10 --epochs 1200 --batch_size 96 --testbatch_size 96 --lr 0.0015 --warmstart 17 --conststep 1000 --cosstep 17 --lexp_layer 1 --decompnoise 1e-4  --gradclipnorm 1e-1 --wd 1e-1 
+python main.py --dataset zinc --repeat 10 --epochs 1200 --batch_size 96 --testbatch_size 96 --lr 0.0015 --warmstart 17 --conststep 1000 --cosstep 17 --lexp_layer 1 --decompnoise 1e-4  --gradclipnorm 1e-1 --wd 1e-1 --align_size 4
 ```
 ?? eigenvalue sqrt
 
