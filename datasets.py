@@ -383,12 +383,21 @@ def loaddataset(name: str,
         val_ds.num_tasks = 11
         tst_ds.num_tasks = 11
         return (trn_ds, val_ds, tst_ds), "fixed", MeanAbsoluteError(), "l1reg"
-    elif name in ["MUTAG", "DD", "PROTEINS", "PTC-MR", "IMDB-BINARY"]:
-        dataset = TUDataset("dataset", name=name, **kwargs)
+    elif name in ["MUTAG", "DD", "PROTEINS", "PTC_MR", "IMDB-BINARY"]:
+        def TUpretransform(data):
+            if data.x is None:
+                data.x = torch.ones((data.num_nodes, 1), dtype=torch.float)
+            else:
+                data.x = data.x + 1
+            if data.edge_attr is None:
+                data.edge_attr = torch.ones((data.edge_index.shape[1]), dtype=torch.float)
+            else:
+                data.edge_attr = data.edge_attr + 1
+            data.y = data.y.reshape(1, 1).to(torch.float)
+            return data
+        dataset = TUDataset("dataset", name=name, use_edge_attr=True, use_node_attr=True, pre_transform=TUpretransform, **kwargs)
         dataset.num_tasks = 1
-        dataset.y = dataset.y.to(torch.float)
-        print(dataset.data)
-        return (dataset, ), "fold-9-0-1", Accuracy("binary"), "bincls"
+        return (dataset, ), "fold-9-1-0", Accuracy("binary"), "bincls"
     elif name == "zinc":
 
         def zincpretransform(data):
@@ -488,11 +497,19 @@ def loaddataset(name: str,
 
 if __name__ == "__main__":
     datalist = [
-        "sr", "EXP", "CSL", "subgcount0", "zinc", "MUTAG", "DD", "PROTEINS",
-        "ogbg-molhiv", "ogbg-molpcba"
-    ]  # "QM9",  "IMDB-BINARY",
+        "IMDB-BINARY"#"PROTEINS", "DD","PROTEINS","IMDB-BINARY", "PTC_MR", "MUTAG"
+    ]  # "DD","PROTEINS","IMDB-BINARY", "PTC_MR", "MUTAG",  "QM9",  "IMDB-BINARY","sr", "EXP", "CSL", "subgcount0", "zinc", "ogbg-molhiv", "ogbg-molpcba"
     for ds in datalist:
         datasets = loaddataset(ds)[0]
         dataset = datasets[0]
         data = dataset[0]
-        print(ds, dataset.num_tasks, data, data.x.dtype, data.y.dtype)
+        print(ds, max([g.num_nodes for g in dataset]), len(dataset), data.x, data.edge_attr)#, data.x, data.y)
+
+'''
+PROTEINS 620 1113 Data(edge_index=[2, 162], x=[42, 4], y=[1, 1], edge_attr=[162])
+DD 5748 1178 Data(edge_index=[2, 1798], x=[327, 89], y=[1, 1], edge_attr=[1798])
+PROTEINS 620 1113 Data(edge_index=[2, 162], x=[42, 4], y=[1, 1], edge_attr=[162])
+IMDB-BINARY 136 1000 Data(edge_index=[2, 146], y=[1, 1], x=[20, 1], edge_attr=[146], num_nodes=20)
+PTC_MR 64 344 Data(edge_index=[2, 2], x=[2, 18], edge_attr=[2, 4], y=[1, 1])
+MUTAG 28 188 Data(edge_index=[2, 38], x=[17, 7], edge_attr=[38, 4], y=[1, 1])
+'''

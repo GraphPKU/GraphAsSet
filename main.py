@@ -116,6 +116,7 @@ def parserarg():
     parser.add_argument('--num_workers', type=int, default=0)
 
     parser.add_argument("--noamp", dest="amp", action="store_false")
+    parser.add_argument("--nocompile", dest="compile", action="store_false")
     parser.add_argument('--batch_size', type=int, default=16)
     parser.add_argument('--testbatch_size', type=int, default=16)
     parser.add_argument('--epochs', type=int, default=100)
@@ -135,7 +136,6 @@ def parserarg():
     parser.add_argument('--cosstep', type=int, default=40)
     parser.add_argument('--use_y_scale', action="store_true")
 
-    parser.add_argument('--dppreepoch', type=int, default=-1)
     parser.add_argument('--dp', type=float, default=0.0)
     parser.add_argument('--eldp', type=float, default=0.0)
 
@@ -343,6 +343,7 @@ def buildModel(args, num_tasks, device, dataset, needcompile: bool=True):
         model.register_buffer("ymean", torch.tensor(0))
         model.register_buffer("ystd", torch.tensor(1))
     print(model)
+    print(f"numel {sum([p.numel() for p in model.parameters()])}")
     if needcompile:
         return torch.compile(model)
     else:
@@ -411,7 +412,7 @@ def main():
                                  drop_last=False,
                                  num_workers=args.num_workers)
         print(f"split {len(trn_d)} {len(val_d)} {len(tst_d)}")
-        model = buildModel(args, trn_d.num_tasks, device, trn_d)
+        model = buildModel(args, trn_d.num_tasks, device, trn_d, args.compile)
 
         optimizer = optim.AdamW(model.parameters(), lr=args.lr, weight_decay=args.wd, betas=(args.beta, 0.999))
         if args.load is not None:
@@ -443,7 +444,10 @@ def main():
             t1 = time.time()
             train_perf = 0.0 #eval(model, device, train_eval_loader, evaluator, args.amp, args)
             valid_perf = eval(model, device, valid_loader, evaluator, args.amp, args)
-            test_perf = eval(model, device, test_loader, evaluator, args.amp, args)
+            if len(test_loader) > 0:
+                test_perf = eval(model, device, test_loader, evaluator, args.amp, args)
+            else:
+                test_perf = 0.0
             print(
                 f" test time : {time.time()-t1:.1f} Train {train_perf} Validation {valid_perf} Test {test_perf}",
                 flush=True)
@@ -457,6 +461,8 @@ def main():
                                    f"mod/{args.save}.{rep}.pt")
                 torch.save(optimizer.state_dict(),
                                    f"mod/{args.save}.opt.{rep}.pt")
+            if epoch == 1:
+                print(f"GPU memory {torch.cuda.max_memory_allocated()/1024/1024/1024:.2f}")
         if 'cls' in task:
             best_val_epoch = np.argmax(
                 np.array(valid_curve) + np.arange(len(valid_curve)) * 1e-15)

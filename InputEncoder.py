@@ -27,6 +27,21 @@ class QInputEncoder(nn.Module):
         elif kwargs["dataset"].startswith("qm9"):
             self.xemb = nn.Linear(11, hiddim)
             self.edgeEmb = nn.Linear(4, hiddim)
+        elif kwargs["dataset"] == "PTC_MR":
+            self.xemb = nn.Linear(18, hiddim)
+            self.edgeEmb = nn.Linear(4, hiddim)
+        elif kwargs["dataset"] == "PROTEINS":
+            self.xemb = nn.Linear(4, hiddim)
+            self.useea = True
+        elif kwargs["dataset"] == "MUTAG":
+            self.xemb = nn.Linear(7, hiddim)
+            self.edgeEmb = nn.Linear(4, hiddim)
+        elif kwargs["dataset"] == "DD":
+            self.xemb = nn.Linear(89, hiddim)
+            self.useea = True
+        elif kwargs["dataset"] == "IMDB-BINARY":
+            self.xemb = nn.Linear(1, hiddim)
+            self.useea = True
         elif kwargs["dataset"] == "ogbg-molhiv":
             self.xemb = MultiEmbedding(hiddim, kwargs["xembdims"],
                                        **kwargs["xemb"])
@@ -62,12 +77,12 @@ class QInputEncoder(nn.Module):
         A (b, n, n, d)
         '''
         if self.useea:
-            eA = A
             A = A.squeeze(-1).to(torch.float)
         else:
             eA = self.edgeEmb(A)
             A = torch.any(A != 0, dim=-1).to(torch.float)
         D = torch.sum(A, dim=-1)  # (#graph, N)
+        assert torch.all(A==A.transpose(-1, -2))
         if self.laplacian:
             L = torch.diag_embed(D) - A
         else:
@@ -108,9 +123,9 @@ class QInputEncoder(nn.Module):
             dist = self.distEmb(dist)
             eA = eA * dist
         if self.useea:
+            U = U.unsqueeze(-1)
+        else:
             eA.masked_fill_(nodemask.unsqueeze(1).unsqueeze(-1), 0)
             eA.masked_fill_(nodemask.unsqueeze(2).unsqueeze(-1), 0)
             U = torch.einsum("bnmd,bml->bnld", eA, U)
-        else:
-            U = U.unsqueeze(-1)
         return LambdaEmb, Lambdamask, U, X, nodemask

@@ -7,7 +7,7 @@ We use python 3.10 with pytorch 2.0.1, torchmetrics 1.0.3, ogb 1.3.6, and pyg 2.
 On ZINC:
 ```
 cd zinc
-python main.py --dataset zinc --repeat 10 --epochs 1200 --batch_size 96 --testbatch_size 96 --lr 0.0015 --warmstart 17 --conststep 1000 --cosstep 17 --lexp_layer 1 --decompnoise 1e-4  --gradclipnorm 1e-1 --wd 1e-1
+python main.py --dataset zinc --repeat 10 --epochs 1200 --batch_size 96 --testbatch_size 96 --lr 0.0015 --warmstart 17 --conststep 1000 --cosstep 17 --lexp_layer 1 --decompnoise 1e-4  --gradclipnorm 1e-1 --wd 1e-1 
 ```
 ?? eigenvalue sqrt
 
@@ -46,4 +46,4 @@ peptide-struct
 cd pep
 python main.py --dataset pepstruct --repeat 1 --epochs 40 --gsizenorm 1.9 --el_norm ln --batch_size 2 --testbatch_size 2 --lr 0.0008 --warmstart 40 --conststep 0 --cosstep 8 --num_layers 8 --l_layers 4 --decompnoise 1e-06 --beta 0.98 --noconv_tailact --nosv_tailact --novmean --novnorm --noelvmean --noelvnorm --align_size 32
 ```
-CUDA_VISIBLE_DEVICES=7 nohup python main.py --dataset pepstruct --repeat 1 --epochs 40 --gsizenorm 1.9 --el_norm ln --batch_size 2 --testbatch_size 2 --lr 0.0008 --warmstart 80 --conststep 0 --cosstep 8 --num_layers 8 --l_layers 4 --decompnoise 1e-06 --beta 0.997 --noconv_tailact --nosv_tailact --novmean --novnorm --noelvmean --noelvnorm --align_size 32 > pepstruct.beta997.warmstart80.out &
+CUDA_VISIBLE_DEVICES=7 nohup python main.py --dataset pepstruct --repeat 1 --epochs 80 --gsizenorm 1.9 --el_norm ln --batch_size 2 --testbatch_size 2 --lr 0.0008 --warmstart 80 --conststep 0 --cosstep 8 --num_layers 8 --l_layers 4 --decompnoise 1e-06 --beta 0.997 --noconv_tailact --nosv_tailact --novmean --novnorm --noelvmean --noelvnorm --align_size 32 > pepstruct.beta997.warmstart80.out &
