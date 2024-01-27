@@ -21,3 +21,4 @@ mod
 *.sh
 readout.py
 .gitignore
+*out
