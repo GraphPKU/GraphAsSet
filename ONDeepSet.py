@@ -15,6 +15,7 @@ class GlobalAggr(nn.Module):
         self.scalar = PermEquiLayer(hiddim, hiddim, "deepset", True, **kwargs["permlayer"])
         self.linv1 = nn.Linear(hiddim, hiddim, False)
         self.linv2 = nn.Linear(hiddim, hiddim, False)
+        self.linv3 = nn.Linear(hiddim, hiddim, False)
 
     def forward(self, s, v, nodemask):
         '''
@@ -25,7 +26,7 @@ class GlobalAggr(nn.Module):
         return (B, d), (B, M, d), (B, M, M, d)
         '''
         gs = self.scalar.forward(s, nodemask)
-        gv = v.sum(dim=1)
+        gv = self.linv3(v.sum(dim=1))
         gv2 = torch.einsum("bnad,bncd->bacd", self.linv1(v), self.linv2(v))
         return gs, gv, gv2
 
@@ -48,13 +49,34 @@ class Tprod(nn.Module):
         return (B, d), (B, M, d), (B, M, M, d)
         '''
         v_vv2 = self.linv1(torch.einsum("bnmd,bmcd->bncd", v, gv2))
-        v_sv = self.linv2(s.unsqueeze(2)*gv.unsqueeze(1))
         v_vs = self.linv3(gs.unsqueeze(-2).unsqueeze(-2) * v)
-        v = v_vv2 + v_sv + v_vs
+        v_sv = self.linv2(s.unsqueeze(2)*gv.unsqueeze(1))
+        v = (v_vv2 + v_sv + v_vs) / 3
         s_v2t = torch.einsum("bmmd->bd", gv2)
         s_vv = torch.einsum("bmd,bnmd->bnd", gv, v)
         s = (self.lin1(s_v2t)*gs).unsqueeze(-2)*self.lin2(s)*self.lin3(s_vv)
         s = self.lins(s)
+        return s, v
+
+
+class SimpleTprod(nn.Module):
+    def __init__(self, hiddim, **kwargs) -> None:
+        super().__init__()
+        self.lin1 = MLP(hiddim, hiddim, hiddim, **kwargs["mlp"])
+        self.lin2 = MLP(hiddim, hiddim, hiddim, **kwargs["mlp"])
+        self.linv1 = nn.Linear(hiddim, hiddim, False)
+        self.linv2 = nn.Linear(hiddim, hiddim, False)
+
+    def forward(self, s, v, gs, gv, gv2):
+        '''
+        s (B, N, d)
+        v (B, N, M, d)
+        nodemask (B, N)
+        return (B, d), (B, M, d), (B, M, M, d)
+        '''
+        v_vv2 = self.linv1(torch.einsum("bnmd,bmcd->bncd", v, gv2))
+        v = (v_vv2 + self.linv2(gv).unsqueeze(1)) / 1.414
+        s = (self.lin1(s) + self.lin2(gs.unsqueeze(1))) / 1.414
         return s, v
 
 class ONDeepSet(nn.Module):
@@ -91,10 +113,14 @@ class ONDeepSet(nn.Module):
         self.svmixs = nn.ModuleList(
             [svMix(hiddim, **kwargs["svmix"]) if usesvmix else Imod() for _ in range(num_layers)]
         )
-        
-        self.tprods = nn.ModuleList(
-            [Tprod(hiddim, **kwargs["tprod"]) for _ in range(num_layers)]
-        )
+        if kwargs["simtprod"]:
+            self.tprods = nn.ModuleList(
+                [SimpleTprod(hiddim, **kwargs["tprod"]) for _ in range(num_layers)]
+            )
+        else:
+            self.tprods = nn.ModuleList(
+                [Tprod(hiddim, **kwargs["tprod"]) for _ in range(num_layers)]
+            )
 
         self.predlin = MLP(hiddim, hiddim, outdim, **kwargs["predlin"])
         self.predln = nn.LayerNorm(outdim, elementwise_affine=False) if kwargs["outln"] else nn.Identity()
@@ -143,6 +169,7 @@ class ONDeepSet(nn.Module):
                 gv2 = gv2 + tgv2
 
             ts, tv = self.svmixs[i](self.sln(X), self.vln(coord))
+            ts = ts.masked_fill(nodemask.unsqueeze(-1), 0)
             ts1, tv1 = self.tprods[i](ts, tv, gs, gv, gv2)
 
             coord = coord + tv1

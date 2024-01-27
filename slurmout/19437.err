@@ -1,0 +1,16 @@
+/ceph/home/muhan01/wangxiyuan/GraphAsSet/utils.py:20: UserWarning: not equivalent to Identity
+  warnings.warn("not equivalent to Identity")
+/ceph/home/muhan01/wangxiyuan/GraphAsSet/utils.py:20: UserWarning: not equivalent to Identity
+  warnings.warn("not equivalent to Identity")
+/ceph/home/muhan01/wangxiyuan/GraphAsSet/utils.py:20: UserWarning: not equivalent to Identity
+  warnings.warn("not equivalent to Identity")
+/ceph/home/muhan01/wangxiyuan/GraphAsSet/utils.py:20: UserWarning: not equivalent to Identity
+  warnings.warn("not equivalent to Identity")
+/ceph/home/muhan01/miniconda3/envs/torch2/lib/python3.10/site-packages/torch/optim/lr_scheduler.py:139: UserWarning: Detected call of `lr_scheduler.step()` before `optimizer.step()`. In PyTorch 1.1.0 and later, you should call them in the opposite order: `optimizer.step()` before `lr_scheduler.step()`.  Failure to do this will result in PyTorch skipping the first value of the learning rate schedule. See more details at https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate
+  warnings.warn("Detected call of `lr_scheduler.step()` before `optimizer.step()`. "
+/ceph/home/muhan01/miniconda3/envs/torch2/lib/python3.10/site-packages/torch/optim/lr_scheduler.py:139: UserWarning: Detected call of `lr_scheduler.step()` before `optimizer.step()`. In PyTorch 1.1.0 and later, you should call them in the opposite order: `optimizer.step()` before `lr_scheduler.step()`.  Failure to do this will result in PyTorch skipping the first value of the learning rate schedule. See more details at https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate
+  warnings.warn("Detected call of `lr_scheduler.step()` before `optimizer.step()`. "
+/ceph/home/muhan01/miniconda3/envs/torch2/lib/python3.10/site-packages/torch/optim/lr_scheduler.py:139: UserWarning: Detected call of `lr_scheduler.step()` before `optimizer.step()`. In PyTorch 1.1.0 and later, you should call them in the opposite order: `optimizer.step()` before `lr_scheduler.step()`.  Failure to do this will result in PyTorch skipping the first value of the learning rate schedule. See more details at https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate
+  warnings.warn("Detected call of `lr_scheduler.step()` before `optimizer.step()`. "
+/ceph/home/muhan01/miniconda3/envs/torch2/lib/python3.10/site-packages/torch/optim/lr_scheduler.py:139: UserWarning: Detected call of `lr_scheduler.step()` before `optimizer.step()`. In PyTorch 1.1.0 and later, you should call them in the opposite order: `optimizer.step()` before `lr_scheduler.step()`.  Failure to do this will result in PyTorch skipping the first value of the learning rate schedule. See more details at https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate
+  warnings.warn("Detected call of `lr_scheduler.step()` before `optimizer.step()`. "

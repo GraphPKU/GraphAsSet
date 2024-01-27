@@ -61,13 +61,12 @@ class QInputEncoder(nn.Module):
             hiddim, **kwargs["basic"], **kwargs["lambdaemb"])
         self.degreeEmb = MultiEmbedding(
             hiddim, [100], **kwargs["xemb"]) if kwargs["degreeemb"] else None
-        self.distEmb = rbf_class_mapping[kwargs["lexp"]](hiddim,
-                                                         **kwargs["basic"],
-                                                         **kwargs["lambdaemb"])
         self.normA = kwargs["normA"]
         self.laplacian = kwargs["laplacian"]
         self.decompnoise = kwargs["decompnoise"]
         self.use_pos = kwargs["use_pos"]
+        if self.use_pos:
+            self.distEmb = rbf_class_mapping[kwargs["lexp"]](hiddim, **kwargs["basic"], **kwargs["lambdaemb"])
 
     def setnoiseratio(self, ratio):
         self.decompnoise = ratio

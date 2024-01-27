@@ -1,0 +1,386 @@
+/ceph/home/muhan01/wangxiyuan/GraphAsSet/utils.py:20: UserWarning: not equivalent to Identity
+  warnings.warn("not equivalent to Identity")
+Namespace(dataset='pepfunc', repeat=1, num_workers=0, amp=True, compile=True, batch_size=6, testbatch_size=6, epochs=80, wd=0.1, lr=0.0003, beta=0.9, minlr=0.0, K=0.0, gradclipnorm=1.0, decompnoise=1e-06, seedoffset=0, warmstart=8, conststep=64, cosstep=8, use_y_scale=False, dp=0.0, eldp=0.0, act='silu', lossparam=0.0, advloss=False, embdp=0.0, embbn=False, emborthoinit=False, degreeemb=False, embln=True, featdim=-1, hiddim=88, caldim=-1, normA=False, laplacian=True, sqrtlambda=True, elres=True, usesvmix=True, vmean=True, vnorm=True, elvmean=True, elvnorm=True, snorm=True, gsizenorm=1.85, l_encoder='deepset', l_layers=3, l_combine='mul', l_aggr='mean', l_res=True, l_mlptailact1=True, l_mlplayers1=2, l_mlpnorm1='ln', l_mlptailact2=False, l_mlplayers2=0, l_mlpnorm2='none', num_layers=6, sv_uselinv=True, sv_tailact=True, sv_res=True, sv_numlayer=1, sv_norm='none', el_uselinv=True, el_uselins=False, el_tailact=True, el_numlayer=2, el_norm='none', el_uses=False, conv_uselinv=True, conv_tailact=True, conv_numlayer=1, conv_norm='none', predlin_numlayer=1, predlin_norm='none', lexp='mlp', lexp_layer=2, lexp_norm='ln', outln=False, pool='mean', Tm=1, save=None, load='pepfunc.wd1e-1', use_pos=False, align_size=32)
+fixed bincls
+10873 2331 2331
+split 10873 2331 2331
+num_task 10
+PiOModel(
+  (inputencoder): QInputEncoder(
+    (xemb): MultiEmbedding(
+      (embedding_list): ModuleList(
+        (0): Embedding(18, 88, padding_idx=0)
+        (1): Embedding(4, 88, padding_idx=0)
+        (2-3): 2 x Embedding(8, 88, padding_idx=0)
+        (4): Embedding(6, 88, padding_idx=0)
+        (5): Embedding(2, 88, padding_idx=0)
+        (6): Embedding(7, 88, padding_idx=0)
+        (7-8): 2 x Embedding(3, 88, padding_idx=0)
+      )
+      (postemb): Sequential(
+        (0): LayerNorm((88,), eps=1e-05, elementwise_affine=False)
+      )
+    )
+    (edgeEmb): MultiEmbedding(
+      (embedding_list): ModuleList(
+        (0-2): 3 x Embedding(5, 88, padding_idx=0)
+      )
+      (postemb): Sequential(
+        (0): LayerNorm((88,), eps=1e-05, elementwise_affine=False)
+      )
+    )
+    (LambdaEmb): MLPEncoding(
+      (lin): MLP(
+        (lin): Sequential(
+          (0): Linear(in_features=1, out_features=176, bias=True)
+          (1): LayerNorm(
+            (norm): LayerNorm((176,), eps=1e-05, elementwise_affine=True)
+          )
+          (2): SiLU(inplace=True)
+          (3): Linear(in_features=176, out_features=88, bias=True)
+          (4): LayerNorm(
+            (norm): LayerNorm((88,), eps=1e-05, elementwise_affine=True)
+          )
+          (5): SiLU(inplace=True)
+        )
+      )
+    )
+  )
+  (LambdaEncoder): PermEquiLayer(
+    (set2set): Sequential(
+      (0): Set2Set(
+      (mlp1): MLP(
+        (lin): Sequential(
+          (0): Linear(in_features=88, out_features=88, bias=True)
+          (1): LayerNorm(
+            (norm): LayerNorm((88,), eps=1e-05, elementwise_affine=True)
+          )
+          (2): SiLU(inplace=True)
+          (3): Linear(in_features=88, out_features=88, bias=True)
+          (4): LayerNorm(
+            (norm): LayerNorm((88,), eps=1e-05, elementwise_affine=True)
+          )
+          (5): SiLU(inplace=True)
+        )
+      )
+      (mlp2): MLP(
+        (lin): Sequential(
+          (0): Linear(in_features=88, out_features=88, bias=True)
+          (1): LayerNorm(
+            (norm): LayerNorm((88,), eps=1e-05, elementwise_affine=True)
+          )
+          (2): SiLU(inplace=True)
+          (3): Linear(in_features=88, out_features=88, bias=True)
+          (4): LayerNorm(
+            (norm): LayerNorm((88,), eps=1e-05, elementwise_affine=True)
+          )
+          (5): SiLU(inplace=True)
+        )
+      )
+    )
+      (1): Set2Set(
+      (mlp1): MLP(
+        (lin): Sequential(
+          (0): Linear(in_features=88, out_features=88, bias=True)
+          (1): LayerNorm(
+            (norm): LayerNorm((88,), eps=1e-05, elementwise_affine=True)
+          )
+          (2): SiLU(inplace=True)
+          (3): Linear(in_features=88, out_features=88, bias=True)
+          (4): LayerNorm(
+            (norm): LayerNorm((88,), eps=1e-05, elementwise_affine=True)
+          )
+          (5): SiLU(inplace=True)
+        )
+      )
+      (mlp2): MLP(
+        (lin): Sequential(
+          (0): Linear(in_features=88, out_features=88, bias=True)
+          (1): LayerNorm(
+            (norm): LayerNorm((88,), eps=1e-05, elementwise_affine=True)
+          )
+          (2): SiLU(inplace=True)
+          (3): Linear(in_features=88, out_features=88, bias=True)
+          (4): LayerNorm(
+            (norm): LayerNorm((88,), eps=1e-05, elementwise_affine=True)
+          )
+          (5): SiLU(inplace=True)
+        )
+      )
+    )
+      (2): Set2Set(
+      (mlp1): MLP(
+        (lin): Sequential(
+          (0): Linear(in_features=88, out_features=88, bias=True)
+          (1): LayerNorm(
+            (norm): LayerNorm((88,), eps=1e-05, elementwise_affine=True)
+          )
+          (2): SiLU(inplace=True)
+          (3): Linear(in_features=88, out_features=88, bias=True)
+          (4): LayerNorm(
+            (norm): LayerNorm((88,), eps=1e-05, elementwise_affine=True)
+          )
+          (5): SiLU(inplace=True)
+        )
+      )
+      (mlp2): MLP(
+        (lin): Sequential(
+          (0): Linear(in_features=88, out_features=88, bias=True)
+          (1): LayerNorm(
+            (norm): LayerNorm((88,), eps=1e-05, elementwise_affine=True)
+          )
+          (2): SiLU(inplace=True)
+          (3): Linear(in_features=88, out_features=88, bias=True)
+          (4): LayerNorm(
+            (norm): LayerNorm((88,), eps=1e-05, elementwise_affine=True)
+          )
+          (5): SiLU(inplace=True)
+        )
+      )
+    )
+      (3): Identity()
+    )
+    (set2vec): Sequential(
+      (0): MLP(
+      (lin): Sequential(
+        (0): NoneNorm()
+      )
+    )
+    )
+  )
+  (elprojs): ModuleList(
+    (0-5): 6 x sv2el(
+      (linv1): Linear(in_features=88, out_features=88, bias=False)
+      (linv2): Linear(in_features=88, out_features=88, bias=False)
+      (lins1): Identity()
+      (lins2): Identity()
+      (lin): MLP(
+        (lin): Sequential(
+          (0): Linear(in_features=88, out_features=88, bias=True)
+          (1): NoneNorm()
+          (2): SiLU(inplace=True)
+          (3): Linear(in_features=88, out_features=88, bias=True)
+          (4): NoneNorm()
+          (5): SiLU(inplace=True)
+        )
+      )
+    )
+  )
+  (svmixs): ModuleList(
+    (0-5): 6 x svMix(
+      (linv1): Linear(in_features=88, out_features=88, bias=False)
+      (linv2): Linear(in_features=88, out_features=88, bias=False)
+      (linv3): Identity()
+      (lins1): MLP(
+        (lin): Sequential(
+          (0): Linear(in_features=88, out_features=88, bias=True)
+          (1): NoneNorm()
+          (2): SiLU(inplace=True)
+        )
+      )
+      (lins2): MLP(
+        (lin): Sequential(
+          (0): Linear(in_features=88, out_features=88, bias=True)
+          (1): NoneNorm()
+          (2): SiLU(inplace=True)
+        )
+      )
+      (lins3): Identity()
+    )
+  )
+  (convs): ModuleList(
+    (0-5): 6 x DirCFConv(
+      (lins): MLP(
+        (lin): Sequential(
+          (0): Linear(in_features=88, out_features=88, bias=True)
+          (1): NoneNorm()
+          (2): SiLU(inplace=True)
+        )
+      )
+      (linv): Linear(in_features=88, out_features=88, bias=False)
+    )
+  )
+  (predlin): MLP(
+    (lin): Sequential(
+      (0): Linear(in_features=88, out_features=10, bias=True)
+    )
+  )
+  (predln): Identity()
+  (vln): Sequential(
+    (0): VMean()
+    (1): VNorm()
+  )
+  (elvln): Sequential(
+    (0): VMean()
+    (1): VNorm()
+  )
+  (sln): LayerNorm((88,), eps=1e-05, elementwise_affine=False)
+)
+numel 587234
+mod/pepfunc.wd1e-1.0.pt
+<All keys matched successfully>
+None
+Epoch 1 train time : 980.8 loss: 1.06e-01
+ test time : 623.9 Train 0.0 Validation 0.6358684301376343 Test 0.6319647431373596
+GPU memory 19.28
+Epoch 2 train time : 458.2 loss: 1.14e-01
+ test time : 67.4 Train 0.0 Validation 0.6293060779571533 Test 0.6225883364677429
+Epoch 3 train time : 390.1 loss: 1.21e-01
+ test time : 67.7 Train 0.0 Validation 0.6311914920806885 Test 0.6288937330245972
+Epoch 4 train time : 417.9 loss: 1.29e-01
+ test time : 75.7 Train 0.0 Validation 0.6226447820663452 Test 0.6095601320266724
+Epoch 5 train time : 418.7 loss: 1.37e-01
+ test time : 65.6 Train 0.0 Validation 0.6275964379310608 Test 0.6098066568374634
+Epoch 6 train time : 388.8 loss: 1.46e-01
+ test time : 67.4 Train 0.0 Validation 0.6026612520217896 Test 0.5843958258628845
+Epoch 7 train time : 405.1 loss: 1.55e-01
+ test time : 77.7 Train 0.0 Validation 0.6179150342941284 Test 0.6050175428390503
+Epoch 8 train time : 419.8 loss: 1.65e-01
+ test time : 74.4 Train 0.0 Validation 0.593341588973999 Test 0.5774041414260864
+Epoch 9 train time : 394.5 loss: 1.68e-01
+ test time : 68.7 Train 0.0 Validation 0.6098800897598267 Test 0.5863139033317566
+Epoch 10 train time : 392.9 loss: 1.70e-01
+ test time : 74.4 Train 0.0 Validation 0.6134212613105774 Test 0.5973690748214722
+Epoch 11 train time : 424.9 loss: 1.66e-01
+ test time : 76.1 Train 0.0 Validation 0.6143856048583984 Test 0.5946249961853027
+Epoch 12 train time : 404.1 loss: 1.68e-01
+ test time : 68.2 Train 0.0 Validation 0.5996251702308655 Test 0.5774585604667664
+Epoch 13 train time : 391.5 loss: 1.66e-01
+ test time : 68.8 Train 0.0 Validation 0.6029874682426453 Test 0.5811732411384583
+Epoch 14 train time : 417.8 loss: 1.68e-01
+ test time : 75.2 Train 0.0 Validation 0.6235092878341675 Test 0.6033796668052673
+Epoch 15 train time : 414.8 loss: 1.65e-01
+ test time : 67.4 Train 0.0 Validation 0.6199790835380554 Test 0.6059385538101196
+Epoch 16 train time : 391.9 loss: 1.65e-01
+ test time : 67.2 Train 0.0 Validation 0.6083123683929443 Test 0.6074002385139465
+Epoch 17 train time : 405.5 loss: 1.64e-01
+ test time : 77.3 Train 0.0 Validation 0.6085132360458374 Test 0.5926276445388794
+Epoch 18 train time : 421.9 loss: 1.63e-01
+ test time : 75.7 Train 0.0 Validation 0.6170891523361206 Test 0.5981975197792053
+Epoch 19 train time : 368.0 loss: 1.64e-01
+ test time : 62.8 Train 0.0 Validation 0.6172327995300293 Test 0.5858221650123596
+Epoch 20 train time : 362.3 loss: 1.62e-01
+ test time : 62.6 Train 0.0 Validation 0.6118565797805786 Test 0.5843785405158997
+Epoch 21 train time : 364.9 loss: 1.63e-01
+ test time : 62.6 Train 0.0 Validation 0.6169055700302124 Test 0.6109791994094849
+Epoch 22 train time : 363.1 loss: 1.62e-01
+ test time : 62.9 Train 0.0 Validation 0.6135479211807251 Test 0.6003775596618652
+Epoch 23 train time : 365.1 loss: 1.59e-01
+ test time : 62.7 Train 0.0 Validation 0.6259301900863647 Test 0.6007871627807617
+Epoch 24 train time : 363.3 loss: 1.58e-01
+ test time : 62.8 Train 0.0 Validation 0.6067735552787781 Test 0.5781338214874268
+Epoch 25 train time : 365.2 loss: 1.60e-01
+ test time : 63.1 Train 0.0 Validation 0.5986383557319641 Test 0.588853657245636
+Epoch 26 train time : 363.7 loss: 1.58e-01
+ test time : 62.7 Train 0.0 Validation 0.6133069396018982 Test 0.6026847958564758
+Epoch 27 train time : 366.9 loss: 1.59e-01
+ test time : 63.0 Train 0.0 Validation 0.6123939752578735 Test 0.5977437496185303
+Epoch 28 train time : 371.0 loss: 1.57e-01
+ test time : 63.7 Train 0.0 Validation 0.5970388650894165 Test 0.5898380279541016
+Epoch 29 train time : 374.6 loss: 1.58e-01
+ test time : 63.6 Train 0.0 Validation 0.6134718060493469 Test 0.605738639831543
+Epoch 30 train time : 377.0 loss: 1.58e-01
+ test time : 63.8 Train 0.0 Validation 0.6219421625137329 Test 0.5985970497131348
+Epoch 31 train time : 375.6 loss: 1.54e-01
+ test time : 63.9 Train 0.0 Validation 0.603421151638031 Test 0.5850607752799988
+Epoch 32 train time : 379.9 loss: 1.56e-01
+ test time : 64.3 Train 0.0 Validation 0.6305626630783081 Test 0.6124895811080933
+Epoch 33 train time : 377.2 loss: 1.56e-01
+ test time : 64.5 Train 0.0 Validation 0.524634599685669 Test 0.5263900756835938
+Epoch 34 train time : 377.2 loss: 1.56e-01
+ test time : 64.7 Train 0.0 Validation 0.5989307761192322 Test 0.5858871936798096
+Epoch 35 train time : 378.1 loss: 1.56e-01
+ test time : 64.9 Train 0.0 Validation 0.6253917217254639 Test 0.5896886587142944
+Epoch 36 train time : 377.6 loss: 1.56e-01
+ test time : 64.1 Train 0.0 Validation 0.6014484167098999 Test 0.5999122858047485
+Epoch 37 train time : 379.3 loss: 1.54e-01
+ test time : 64.5 Train 0.0 Validation 0.6098437309265137 Test 0.5906475782394409
+Epoch 38 train time : 408.4 loss: 1.53e-01
+ test time : 64.2 Train 0.0 Validation 0.5896289944648743 Test 0.5701542496681213
+Epoch 39 train time : 377.1 loss: 1.54e-01
+ test time : 64.1 Train 0.0 Validation 0.5905153155326843 Test 0.5805197954177856
+Epoch 40 train time : 373.4 loss: 1.53e-01
+ test time : 65.7 Train 0.0 Validation 0.6152114272117615 Test 0.5904415249824524
+Epoch 41 train time : 376.6 loss: 1.50e-01
+ test time : 64.3 Train 0.0 Validation 0.6008526086807251 Test 0.5965275168418884
+Epoch 42 train time : 379.8 loss: 1.52e-01
+ test time : 64.2 Train 0.0 Validation 0.6027334332466125 Test 0.596086859703064
+Epoch 43 train time : 377.4 loss: 1.51e-01
+ test time : 64.4 Train 0.0 Validation 0.6039775609970093 Test 0.5987281799316406
+Epoch 44 train time : 378.1 loss: 1.50e-01
+ test time : 64.3 Train 0.0 Validation 0.6247841119766235 Test 0.5903050899505615
+Epoch 45 train time : 376.5 loss: 1.51e-01
+ test time : 64.7 Train 0.0 Validation 0.5939666628837585 Test 0.5965580344200134
+Epoch 46 train time : 378.4 loss: 1.50e-01
+ test time : 64.4 Train 0.0 Validation 0.5988959074020386 Test 0.56801438331604
+Epoch 47 train time : 376.1 loss: 1.48e-01
+ test time : 64.6 Train 0.0 Validation 0.6230526566505432 Test 0.5976656675338745
+Epoch 48 train time : 376.6 loss: 1.48e-01
+ test time : 65.2 Train 0.0 Validation 0.6100536584854126 Test 0.6016371846199036
+Epoch 49 train time : 377.5 loss: 1.49e-01
+ test time : 64.1 Train 0.0 Validation 0.5942949056625366 Test 0.5808441638946533
+Epoch 50 train time : 374.5 loss: 1.49e-01
+ test time : 64.6 Train 0.0 Validation 0.6098812222480774 Test 0.5804471373558044
+Epoch 51 train time : 375.9 loss: 1.49e-01
+ test time : 64.6 Train 0.0 Validation 0.5871366262435913 Test 0.5680853128433228
+Epoch 52 train time : 374.1 loss: 1.50e-01
+ test time : 64.7 Train 0.0 Validation 0.6195743083953857 Test 0.5986026525497437
+Epoch 53 train time : 375.0 loss: 1.45e-01
+ test time : 64.4 Train 0.0 Validation 0.6020475029945374 Test 0.5847989320755005
+Epoch 54 train time : 375.8 loss: 1.46e-01
+ test time : 64.6 Train 0.0 Validation 0.5929483771324158 Test 0.5765180587768555
+Epoch 55 train time : 376.3 loss: 1.47e-01
+ test time : 64.5 Train 0.0 Validation 0.6094440221786499 Test 0.6017976999282837
+Epoch 56 train time : 378.5 loss: 1.47e-01
+ test time : 65.1 Train 0.0 Validation 0.5994217991828918 Test 0.5897635221481323
+Epoch 57 train time : 376.2 loss: 1.47e-01
+ test time : 64.6 Train 0.0 Validation 0.6063843965530396 Test 0.6113468408584595
+Epoch 58 train time : 376.9 loss: 1.45e-01
+ test time : 64.5 Train 0.0 Validation 0.6028271913528442 Test 0.5926346778869629
+Epoch 59 train time : 376.0 loss: 1.47e-01
+ test time : 64.4 Train 0.0 Validation 0.6142865419387817 Test 0.6077979803085327
+Epoch 60 train time : 377.0 loss: 1.47e-01
+ test time : 64.3 Train 0.0 Validation 0.6185013651847839 Test 0.588810920715332
+Epoch 61 train time : 375.2 loss: 1.44e-01
+ test time : 64.5 Train 0.0 Validation 0.6197468638420105 Test 0.619627833366394
+Epoch 62 train time : 377.0 loss: 1.44e-01
+ test time : 64.4 Train 0.0 Validation 0.6215399503707886 Test 0.5915800333023071
+Epoch 63 train time : 377.1 loss: 1.42e-01
+ test time : 64.5 Train 0.0 Validation 0.5950032472610474 Test 0.5858094096183777
+Epoch 64 train time : 375.1 loss: 1.45e-01
+ test time : 65.3 Train 0.0 Validation 0.6086231470108032 Test 0.6017792820930481
+Epoch 65 train time : 373.4 loss: 1.44e-01
+ test time : 64.1 Train 0.0 Validation 0.6040124297142029 Test 0.5889819860458374
+Epoch 66 train time : 374.9 loss: 1.43e-01
+ test time : 64.5 Train 0.0 Validation 0.616867184638977 Test 0.5991056561470032
+Epoch 67 train time : 375.2 loss: 1.41e-01
+ test time : 64.5 Train 0.0 Validation 0.5904606580734253 Test 0.5860730409622192
+Epoch 68 train time : 378.0 loss: 1.41e-01
+ test time : 64.1 Train 0.0 Validation 0.6102606058120728 Test 0.593510091304779
+Epoch 69 train time : 374.6 loss: 1.42e-01
+ test time : 64.4 Train 0.0 Validation 0.6112760305404663 Test 0.6185712814331055
+Epoch 70 train time : 378.2 loss: 1.41e-01
+ test time : 64.4 Train 0.0 Validation 0.6100391745567322 Test 0.5928944945335388
+Epoch 71 train time : 375.8 loss: 1.42e-01
+ test time : 64.8 Train 0.0 Validation 0.6096946001052856 Test 0.5891950726509094
+Epoch 72 train time : 377.8 loss: 1.41e-01
+ test time : 65.2 Train 0.0 Validation 0.5890549421310425 Test 0.5976476073265076
+Epoch 73 train time : 375.7 loss: 1.41e-01
+ test time : 64.6 Train 0.0 Validation 0.6283655762672424 Test 0.6081706881523132
+Epoch 74 train time : 376.1 loss: 1.34e-01
+ test time : 64.4 Train 0.0 Validation 0.6208162903785706 Test 0.6214777827262878
+Epoch 75 train time : 374.5 loss: 1.23e-01
+ test time : 64.3 Train 0.0 Validation 0.6180115938186646 Test 0.6016916632652283
+Epoch 76 train time : 376.8 loss: 1.11e-01
+ test time : 64.1 Train 0.0 Validation 0.625892162322998 Test 0.625159740447998
+Epoch 77 train time : 375.5 loss: 9.21e-02
+ test time : 64.3 Train 0.0 Validation 0.6308659315109253 Test 0.6324962973594666
+Epoch 78 train time : 375.3 loss: 7.67e-02
+ test time : 64.3 Train 0.0 Validation 0.6402491331100464 Test 0.6385679841041565
+Epoch 79 train time : 377.7 loss: 6.42e-02
+ test time : 63.9 Train 0.0 Validation 0.6340406537055969 Test 0.6319519877433777
+Epoch 80 train time : 376.4 loss: 5.75e-02
+ test time : 64.3 Train 0.0 Validation 0.6355952620506287 Test 0.628474235534668
+Best @77 validation score: 0.6402 Test score: 0.6386
+[[77, tensor(0.6402), tensor(0.6386)]]
+all runs:  77.0 0.6402491331100464 0.6385679841041565 0.0 0.0 0.0 

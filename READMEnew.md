@@ -41,6 +41,10 @@ cd pep
 python main.py --dataset pepfunc --repeat 1 --epochs 80 --gsizenorm 1.9 --el_norm ln --batch_size 2 --testbatch_size 2 --lr 0.0008 --pool max --warmstart 40 --conststep 0 --cosstep 20 --l_layers 4 --minlr 4e-5 --decompnoise 1e-06 --beta 0.997 --noconv_tailact --nosv_tailact --novmean --novnorm --noelvmean --noelvnorm --align_size 32
 ```
 
+python main.py --dataset pepfunc --repeat 1 --epochs 80 --el_norm ln --batch_size 6 --testbatch_size 6 --lr 0.0003 --pool max --warmstart 8 --conststep 64 --cosstep 8 --noconv_tailact --nosv_tailact --novmean --novnorm --noelvmean --noelvnorm --align_size 32 --save pepfunc.classic > pepfunc.classic.out &
+
+python main.py --dataset pepstruct --repeat 1 --epochs 80 --el_norm ln --batch_size 6 --testbatch_size 6 --lr 0.0003 --warmstart 8 --conststep 64 --cosstep 8 --noconv_tailact --nosv_tailact --novmean --novnorm --noelvmean --noelvnorm --align_size 32 --save pepstruct.classic > pepstruct.classic.out &
+
 peptide-struct
 ```
 cd pep

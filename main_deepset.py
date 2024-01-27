@@ -180,6 +180,8 @@ def parserarg():
     parser.add_argument("--l_mlplayers2", type=int, default=0)
     parser.add_argument("--l_mlpnorm2", type=str, default="none")
 
+    parser.add_argument("--simtprod", action="store_true")
+
     parser.add_argument("--gaggr_encoder", type=str, default="deepset")
     parser.add_argument("--gaggr_layers", type=int, default=3)
     parser.add_argument("--gaggr_combine", type=str, default="mul")
@@ -189,7 +191,7 @@ def parserarg():
     parser.add_argument("--gaggr_mlplayers1", type=int, default=2)
     parser.add_argument("--gaggr_mlpnorm1", type=str, default="ln")
     parser.add_argument("--gaggr_mlptailact2", action="store_true")
-    parser.add_argument("--gaggr_mlplayers2", type=int, default=0)
+    parser.add_argument("--gaggr_mlplayers2", type=int, default=1)
     parser.add_argument("--gaggr_mlpnorm2", type=str, default="none")
 
     parser.add_argument("--num_layers", type=int, default=6)
@@ -258,6 +260,7 @@ def buildModel(args, num_tasks, device, dataset, needcompile: bool=True):
         "elvmean": args.elvmean,
         "elvnorm": args.elvnorm,
         "snorm": args.snorm,
+        "simtprod": args.simtprod,
         "basic": {
             "dropout": args.dp,
             "activation": act_dict[args.act],

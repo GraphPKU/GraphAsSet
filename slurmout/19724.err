@@ -1,0 +1,3 @@
+/ceph/home/muhan01/wangxiyuan/GraphAsSet/utils.py:20: UserWarning: not equivalent to Identity
+  warnings.warn("not equivalent to Identity")
+slurmstepd: error: *** JOB 19724 ON node006 CANCELLED AT 2023-11-15T23:14:49 DUE TO TIME LIMIT ***
