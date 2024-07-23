@@ -117,7 +117,7 @@ class Imod(nn.Module):
     def forward(self, *args):
         return args
 
-class PiOModel(nn.Module):
+class PST(nn.Module):
     elres: Final[bool]
     num_layers: Final[int]
     num_tasks: Final[int]

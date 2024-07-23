@@ -9,7 +9,7 @@ import numpy as np
 from datasets import loaddataset
 from SizeAlignedLoader import batch2dense
 import numpy as np
-from PiOModel import PiOModel
+from PST import PST
 import os
 from LRScheduler import CosineAnnealingWarmRestarts
 
@@ -33,7 +33,7 @@ def set_seed(seed):
 
 
 def train(criterion: Callable,
-          model: PiOModel,
+          model: PST,
           device: torch.device,
           loader: DataLoader,
           optimizer: optim.Optimizer,
@@ -77,7 +77,7 @@ def train(criterion: Callable,
     return loss
 
 @torch.no_grad()
-def eval(model: PiOModel,
+def eval(model: PST,
          device: torch.device,
          loader: DataLoader,
          evaluator,
@@ -333,7 +333,7 @@ def buildModel(args, num_tasks, device, dataset, needcompile: bool=True):
     print("num_task", num_tasks)
     if args.nodetask:
         args.pool = "none"
-    model = PiOModel(args.featdim, args.caldim, args.hiddim, num_tasks, args.num_layers, args.pool, **kwargs)
+    model = PST(args.featdim, args.caldim, args.hiddim, num_tasks, args.num_layers, args.pool, **kwargs)
     model = model.to(device)
     if args.use_y_scale:
         ys = torch.concat([data.y for data in dataset])

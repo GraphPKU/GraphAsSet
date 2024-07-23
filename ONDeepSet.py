@@ -6,7 +6,7 @@ from InputEncoder import QInputEncoder
 from PermEquiLayer import PermEquiLayer
 from utils import MLP
 import torch.nn.functional as F
-from PiOModel import svMix, VMean, VNorm, Imod
+from PST import svMix, VMean, VNorm, Imod
 
 
 class GlobalAggr(nn.Module):
